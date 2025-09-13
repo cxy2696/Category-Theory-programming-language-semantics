@@ -5,7 +5,7 @@ A collection of objects (e.g., types in a programming language).
 
 For each pair of objects $A, B \in \mathcal{C}$, a set of morphisms $\text{Hom}_{\mathcal{C}}(A, B)$ (e.g., functions $A \to B$).
 
-Composition $\text{Hom}_{\mathcal{C}}(B, C) \times \text{Hom}_{\mathcal{C}}(A, B) \to \text{Hom}_{\mathcal{C}}(A, C)$.
+Composition $\text{Hom}{\mathcal{C}}(B, C) \times \text{Hom}_{\mathcal{C}}(A, B) \to \text{Hom}_{\mathcal{C}}(A, C)$.
 
 For each object $A$, an identity morphism $\text{id}A \in \text{Hom}{\mathcal{C}}(A, A)$
 These satisfy:
