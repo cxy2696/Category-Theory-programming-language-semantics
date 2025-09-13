@@ -84,7 +84,7 @@
             <p><strong>Relevance</strong>:</p>
             <ul class="list-disc pl-6">
                 <li><strong>Goal (a)</strong>: Categories model programming language structure, enabling semantic definitions.</li>
-                <li><strong>Goal (d)</strong>: Programs are interpreted as morphisms in denotational semantics.</li>
+                <li><strong>Goal (b)</strong>: Programs are interpreted as morphisms in denotational semantics.</li>
             </ul>
         </section>
 
@@ -191,9 +191,9 @@ return x = \s -> (x, s)
                 <p>For an object \(A \in \mathcal{C}\), we need \(\mu_A \circ T(\eta_A) = \text{id}_{TA}\). The commutative diagram is:</p>
                 <div class="mermaid">
                     graph TD
-                        TA[T(A)] -->|T(η_A)| T2A[T^2(A)]
+                        TA[T(A)] -->|T(\eta_A)| T2A[T^2(A)]
                         TA -->|id_T(A)| TA2[T(A)]
-                        T2A -->|μ_A| TA2
+                        T2A -->|\eta_A| TA2
                 </div>
                 <p>By the monad’s unit axiom, \(\mu_A \circ T(\eta_A) = \text{id}_{TA}\). In Haskell, for <code>State</code>, <code>return</code> and <code>>>=</code> satisfy this law.</p>
             </div>
@@ -201,7 +201,7 @@ return x = \s -> (x, s)
             <ul class="list-disc pl-6">
                 <li><strong>Goal (a)</strong>: Monads model effects (e.g., state, I/O) in programming languages.</li>
                 <li><strong>Goal (b)</strong>: Proofs verify monad properties.</li>
-                <li><strong>Goal (d)</strong>: Explains denotational semantics for effectful computations.</li>
+                <li><strong>Goal (c)</strong>: Explains denotational semantics for effectful computations.</li>
             </ul>
             <p>See <a href="src/CategoryBasics.hs" class="text-blue-600 hover:underline">src/CategoryBasics.hs</a> for <code>State</code> monad implementation.</p>
         </section>
