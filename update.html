@@ -123,7 +123,7 @@ fmap f (Just x) = Just (f x)
             <ul class="list-disc pl-6">
                 <li><strong>Goal (a)</strong>: Functors model type constructors for data transformations.</li>
                 <li><strong>Goal (b)</strong>: Proofs verify functor properties.</li>
-                <li><strong>Goal (d)</strong>: Supports denotational semantics for functional transformations.</li>
+                <li><strong>Goal (c)</strong>: Supports denotational semantics for functional transformations.</li>
             </ul>
             <p>See <a href="src/CategoryBasics.hs" class="text-blue-600 hover:underline">src/CategoryBasics.hs</a> for <code>Maybe</code> and <code>List</code> functor implementations.</p>
         </section>
@@ -160,7 +160,7 @@ fmap f (listToMaybe xs) == listToMaybe (fmap f xs)
             <ul class="list-disc pl-6">
                 <li><strong>Goal (a)</strong>: Models polymorphic transformations in semantics.</li>
                 <li><strong>Goal (b)</strong>: Naturality proofs build rigor.</li>
-                <li><strong>Goal (d)</strong>: Ensures type-consistent program transformations.</li>
+                <li><strong>Goal (c)</strong>: Ensures type-consistent program transformations.</li>
             </ul>
         </section>
 
@@ -219,7 +219,7 @@ return x = \s -> (x, s)
             <p><strong>Relevance</strong>:</p>
             <ul class="list-disc pl-6">
                 <li><strong>Goal (a)</strong>: Models typed lambda calculus for functional languages.</li>
-                <li><strong>Goal (d)</strong>: Explains semantics via currying and evaluation.</li>
+                <li><strong>Goal (b)</strong>: Explains semantics via currying and evaluation.</li>
             </ul>
         </section>
 
@@ -237,8 +237,8 @@ return x = \s -> (x, s)
             </div>
             <p><strong>Relevance</strong>:</p>
             <ul class="list-disc pl-6">
-                <li><strong>Goal (c)</strong>: Enables exploration of advanced type system semantics.</li>
-                <li><strong>Goal (d)</strong>: Provides a theoretical tool for denotational semantics.</li>
+                <li><strong>Goal (a)</strong>: Enables exploration of advanced type system semantics.</li>
+                <li><strong>Goal (b)</strong>: Provides a theoretical tool for denotational semantics.</li>
             </ul>
         </section>
     </main>
