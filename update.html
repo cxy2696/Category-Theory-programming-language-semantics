@@ -1,0 +1,230 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SemanticsProofs: Category Theory for Programming Language Semantics</title>
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Mermaid for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad: true});</script>
+    <!-- Highlight.js for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2, h3 { color: #2c3e50; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        code { font-family: Consolas, monospace; }
+        .mermaid { margin: 20px 0; }
+        @media (prefers-color-scheme: dark) {
+            body { background-color: #1e1e1e; color: #ddd; }
+            h1, h2, h3 { color: #ecf0f1; }
+            pre { background: #2d2d2d; }
+            a { color: #4da8ff; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SemanticsProofs: Category Theory for Programming Language Semantics</h1>
+        <p>This document formalizes key category theory concepts and their applications to programming language semantics, supporting the study of denotational semantics for languages like Haskell. It covers definitions, theorems, proofs, and examples, with links to implementations in <a href="src/CategoryBasics.hs">src/CategoryBasics.hs</a> and exercises in <a href="exercises/Exercises.md">exercises/Exercises.md</a>.</p>
+    </header>
+
+    <section id="introduction">
+        <h2>Introduction to Category Theory</h2>
+        <p>Category theory provides a unifying language for modeling computational structures. In programming, a category abstracts types and functions, enabling formal semantics for languages like Haskell. The category <strong>Hask</strong> has Haskell types as objects (e.g., <code>Int</code>, <code>Bool</code>) and functions as morphisms (e.g., <code>length :: String -> Int</code>), with composition defined by function composition.</p>
+        <p>This document aligns with the goals of <em>Category Theory for Computer Scientists</em>:</p>
+        <ul>
+            <li><strong>Goal (a)</strong>: Give categorical semantics to programming languages and features.</li>
+            <li><strong>Goal (b)</strong>: Perform basic proofs in category theory.</li>
+            <li><strong>Goal (c)</strong>: Enable further exploration of advanced applications.</li>
+            <li><strong>Goal (d)</strong>: Explain denotational semantics concepts.</li>
+        </ul>
+    </section>
+
+    <section id="categories">
+        <h2>Categories</h2>
+        <p>A category \(\mathcal{C}\) consists of:</p>
+        <ul>
+            <li>A collection of <strong>objects</strong> (e.g., types in a programming language).</li>
+            <li>For each pair of objects \(A, B \in \mathcal{C}\), a set of <strong>morphisms</strong> \(\text{Hom}_{\mathcal{C}}(A, B)\) (e.g., functions \(A \to B\)).</li>
+            <li><strong>Composition</strong> \(\circ: \text{Hom}_{\mathcal{C}}(B, C) \times \text{Hom}_{\mathcal{C}}(A, B) \to \text{Hom}_{\mathcal{C}}(A, C)\).</li>
+            <li>For each object \(A\), an <strong>identity morphism</strong> \(\text{id}_A \in \text{Hom}_{\mathcal{C}}(A, A)\).</li>
+        </ul>
+        <p>These satisfy:</p>
+        <ul>
+            <li><strong>Associativity</strong>: For \(f: A \to B\), \(g: B \to C\), \(h: C \to D\), \((h \circ g) \circ f = h \circ (g \circ f)\).</li>
+            <li><strong>Identity</strong>: For \(f: A \to B\), \(f \circ \text{id}_A = f = \text{id}_B \circ f\).</li>
+        </ul>
+        <h3>Example</h3>
+        <p>In <strong>Hask</strong>, objects are Haskell types (e.g., <code>Int</code>, <code>Bool</code>), and morphisms are functions (e.g., <code>length :: String -> Int</code>). Composition is function composition, e.g., <code>(length . show) :: Int -> Int</code>.</p>
+        <p><strong>Relevance</strong>:</p>
+        <ul>
+            <li><strong>Goal (a)</strong>: Categories model programming language structure, enabling semantic definitions.</li>
+            <li><strong>Goal (d)</strong>: Programs are interpreted as morphisms in denotational semantics.</li>
+        </ul>
+    </section>
+
+    <section id="functors">
+        <h2>Functors</h2>
+        <p>A <strong>functor</strong> \(F: \mathcal{C} \to \mathcal{D}\) maps:</p>
+        <ul>
+            <li>Objects: \(A \in \mathcal{C} \mapsto F(A) \in \mathcal{D}\).</li>
+            <li>Morphisms: \(f: A \to B \mapsto F(f): F(A) \to F(B)\).</li>
+        </ul>
+        <p>Satisfying:</p>
+        <ul>
+            <li>Identity: \(F(\text{id}_A) = \text{id}_{F(A)}\).</li>
+            <li>Composition: \(F(g \circ f) = F(g) \circ F(f)\).</li>
+        </ul>
+        <h3>Example</h3>
+        <p>The <code>Maybe</code> functor in <strong>Hask</strong> maps a type <code>A</code> to <code>Maybe A</code> and a function <code>f :: A -> B</code> to:</p>
+        <pre><code class="language-haskell">
+fmap f :: Maybe A -> Maybe B
+fmap f Nothing = Nothing
+fmap f (Just x) = Just (f x)
+        </code></pre>
+        <h3>Theorem: Functor Laws</h3>
+        <p>For a functor \(F: \mathcal{C} \to \mathcal{D}\):</p>
+        <ol>
+            <li>\(F(\text{id}_A) = \text{id}_{F(A)}\).</li>
+            <li>\(F(g \circ f) = F(g) \circ F(f)\).</li>
+        </ol>
+        <h3>Proof</h3>
+        <p><strong>Identity</strong>: By functor definition, \(F\) preserves identities, so \(F(\text{id}_A) = \text{id}_{F(A)}\).<br>
+        <strong>Composition</strong>: For \(f: A \to B\), \(g: B \to C\), functoriality ensures \(F(g \circ f) = F(g) \circ F(f)\).</p>
+        <p><strong>Relevance</strong>:</p>
+        <ul>
+            <li><strong>Goal (a)</strong>: Functors model type constructors for data transformations.</li>
+            <li><strong>Goal (b)</strong>: Proofs verify functor properties.</li>
+            <li><strong>Goal (d)</strong>: Supports denotational semantics for functional transformations.</li>
+        </ul>
+        <p>See <a href="src/CategoryBasics.hs">src/CategoryBasics.hs</a> for <code>Maybe</code> and <code>List</code> functor implementations.</p>
+    </section>
+
+    <section id="natural-transformations">
+        <h2>Natural Transformations</h2>
+        <p>A <strong>natural transformation</strong> \(\eta: F \to G\) between functors \(F, G: \mathcal{C} \to \mathcal{D}\) is a family of morphisms \(\eta_A: F(A) \to G(A)\) for each \(A \in \mathcal{C}\), such that for any \(f: A \to B\), the following diagram commutes:</p>
+        <div class="mermaid">
+            graph TD
+                FA[F(A)] -->|η_A| GA[G(A)]
+                FA -->|F(f)| FB[F(B)]
+                GA -->|G(f)| GB[G(B)]
+                FB -->|η_B| GB
+        </div>
+        <p>i.e., \(\eta_B \circ F(f) = G(f) \circ \eta_A\).</p>
+        <h3>Example</h3>
+        <p>In <strong>Hask</strong>, <code>listToMaybe :: [a] -> Maybe a</code> is a natural transformation from the <code>List</code> functor to the <code>Maybe</code> functor:</p>
+        <pre><code class="language-haskell">
+listToMaybe [] = Nothing
+listToMaybe (x:_) = Just x
+        </code></pre>
+        <h3>Proof of Naturality</h3>
+        <p>For <code>listToMaybe</code>, verify:</p>
+        <pre><code class="language-haskell">
+fmap f (listToMaybe xs) == listToMaybe (fmap f xs)
+        </code></pre>
+        <p>Left: <code>fmap f (listToMaybe []) = fmap f Nothing = Nothing</code>.<br>
+        Right: <code>listToMaybe (fmap f []) = listToMaybe [] = Nothing</code>.<br>
+        For <code>x:xs</code>, both yield <code>Just (f x)</code>.</p>
+        <p><strong>Relevance</strong>:</p>
+        <ul>
+            <li><strong>Goal (a)</strong>: Models polymorphic transformations in semantics.</li>
+            <li><strong>Goal (b)</strong>: Naturality proofs build rigor.</li>
+            <li><strong>Goal (d)</strong>: Ensures type-consistent program transformations.</li>
+        </ul>
+    </section>
+
+    <section id="monads">
+        <h2>Monads</h2>
+        <p>A <strong>monad</strong> on a category \(\mathcal{C}\) is a functor \(T: \mathcal{C} \to \mathcal{C}\) with natural transformations:</p>
+        <ul>
+            <li>Unit: \(\eta: \text{Id} \to T\).</li>
+            <li>Multiplication: \(\mu: T \circ T \to T\).</li>
+        </ul>
+        <p>Satisfying:</p>
+        <ul>
+            <li>Left unit: \(\mu \circ T\eta = \text{id}_T\).</li>
+            <li>Right unit: \(\mu \circ \eta T = \text{id}_T\).</li>
+            <li>Associativity: \(\mu \circ T\mu = \mu \circ \mu T\).</li>
+        </ul>
+        <h3>Example</h3>
+        <p>The <code>State</code> monad in <strong>Hask</strong> models stateful computations:</p>
+        <pre><code class="language-haskell">
+return x = \s -> (x, s)
+(m >>= k) s = let (a, s') = m s in k a s'
+        </code></pre>
+        <h3>Theorem: Left Unit Law</h3>
+        <p>For a monad \((T, \eta, \mu)\), \(\mu \circ T\eta = \text{id}_T\).</p>
+        <h3>Proof</h3>
+        <p>For an object \(A \in \mathcal{C}\), we need \(\mu_A \circ T(\eta_A) = \text{id}_{TA}\). The commutative diagram is:</p>
+        <div class="mermaid">
+            graph TD
+                TA[T(A)] -->|T(η_A)| T2A[T^2(A)]
+                TA -->|id_T(A)| TA2[T(A)]
+                T2A -->|μ_A| TA2
+        </div>
+        <p>By the monad’s unit axiom, \(\mu_A \circ T(\eta_A) = \text{id}_{TA}\). In Haskell, for <code>State</code>, <code>return</code> and <code>>>=</code> satisfy this law.</p>
+        <p><strong>Relevance</strong>:</p>
+        <ul>
+            <li><strong>Goal (a)</strong>: Monads model effects (e.g., state, I/O) in programming languages.</li>
+            <li><strong>Goal (b)</strong>: Proofs verify monad properties.</li>
+            <li><strong>Goal (d)</strong>: Explains denotational semantics for effectful computations.</li>
+        </ul>
+        <p>See <a href="src/CategoryBasics.hs">src/CategoryBasics.hs</a> for <code>State</code> monad implementation.</p>
+    </section>
+
+    <section id="cccs">
+        <h2>Cartesian Closed Categories</h2>
+        <p>A category \(\mathcal{C}\) is <strong>Cartesian closed</strong> if it has:</p>
+        <ul>
+            <li>A <strong>terminal object</strong> \(1\), with a unique morphism \(!: A \to 1\) for any \(A\).</li>
+            <li><strong>Binary products</strong> \(A \times B\), with projections \(\pi_1: A \times B \to A\), \(\pi_2: A \times B \to B\).</li>
+            <li><strong>Exponential objects</strong> \(B^A\), with evaluation \(\text{ev}: B^A \times A \to B\) and currying \(\lambda(f): C \to B^A\) for any \(f: C \times A \to B\).</li>
+        </ul>
+        <h3>Example</h3>
+        <p>In <strong>Hask</strong>, the terminal object is <code>()</code>, products are tuples <code>(A, B)</code>, and exponentials are function types <code>A -> B</code>.</p>
+        <p><strong>Relevance</strong>:</p>
+        <ul>
+            <li><strong>Goal (a)</strong>: Models typed lambda calculus for functional languages.</li>
+            <li><strong>Goal (d)</strong>: Explains semantics via currying and evaluation.</li>
+        </ul>
+    </section>
+
+    <section id="yoneda">
+        <h2>Yoneda Lemma</h2>
+        <h3>Theorem: Yoneda Lemma</h3>
+        <p>For a category \(\mathcal{C}\), object \(A\), and functor \(F: \mathcal{C} \to \mathbf{Set}\), there is a bijection:</p>
+        \[
+        \text{Nat}(\text{Hom}_{\mathcal{C}}(A, -), F) \cong F(A).
+        \]
+        <h3>Proof</h3>
+        <p>Define \(\phi: \text{Nat}(\text{Hom}_{\mathcal{C}}(A, -), F) \to F(A)\) by \(\phi(\eta) = \eta_A(\text{id}_A)\). The inverse maps \(x \in F(A)\) to \(\eta_B(f) = F(f)(x)\) for \(f: A \to B\). Naturality ensures the bijection.</p>
+        <p><strong>Relevance</strong>:</p>
+        <ul>
+            <li><strong>Goal (c)</strong>: Enables exploration of advanced type system semantics.</li>
+            <li><strong>Goal (d)</strong>: Provides a theoretical tool for denotational semantics.</li>
+        </ul>
+    </section>
+
+    <section id="conclusion">
+        <h2>Conclusion</h2>
+        <p>This document provides a foundation for understanding category theory’s role in programming language semantics. It connects to <a href="src/CategoryBasics.hs">src/CategoryBasics.hs</a> for implementations and <a href="exercises/Exercises.md">exercises/Exercises.md</a> for practice. Explore further with resources like <a href="https://github.com/hmemcpy/milewski-ctfp-pdf">Category Theory for Programmers</a> or Coq formalizations (<a href="https://github.com/jwiegley/category-theory">jwiegley/category-theory</a>).</p>
+    </section>
+</body>
+</html>
