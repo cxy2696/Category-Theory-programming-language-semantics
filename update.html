@@ -133,10 +133,10 @@ fmap f (Just x) = Just (f x)
             <p>A <strong>natural transformation</strong> \(\eta: F \to G\) between functors \(F, G: \mathcal{C} \to \mathcal{D}\) is a family of morphisms \(\eta_A: F(A) \to G(A)\) for each \(A \in \mathcal{C}\), such that for any \(f: A \to B\), the following diagram commutes:</p>
             <div class="mermaid">
                 graph TD
-                    FA[F(A)] -->|η_A| GA[G(A)]
+                    FA[F(A)] -->|\eta_A| GA[G(A)]
                     FA -->|F(f)| FB[F(B)]
                     GA -->|G(f)| GB[G(B)]
-                    FB -->|η_B| GB
+                    FB -->|\eta_B| GB
             </div>
             <p>i.e., \(\eta_B \circ F(f) = G(f) \circ \eta_A\).</p>
             <h3 class="text-xl font-medium mt-4">Example</h3>
