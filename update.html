@@ -132,7 +132,7 @@ fmap f (Just x) = Just (f x)
             <h2 class="text-2xl font-semibold text-blue-700 dark:text-blue-200">Natural Transformations</h2>
             <p>A <strong>natural transformation</strong> \(\eta: F \to G\) between functors \(F, G: \mathcal{C} \to \mathcal{D}\) is a family of morphisms \(\eta_A: F(A) \to G(A)\) for each \(A \in \mathcal{C}\), such that for any \(f: A \to B\), the following diagram commutes:</p>
             <div class="mermaid">
-                graph TD
+                graph LR
                     FA["F(A)"] -->|"\eta_A"| GA["G(A)"]
                     FA -->|"F(f)"| FB["F(B)"]
                     GA -->|"G(f)"| GB["G(B)"]
@@ -190,10 +190,10 @@ return x = \s -> (x, s)
             <div class="toggle-content">
                 <p>For an object \(A \in \mathcal{C}\), we need \(\mu_A \circ T(\eta_A) = \text{id}_{TA}\). The commutative diagram is:</p>
                 <div class="mermaid">
-                    graph TD
-                        TA[T(A)] -->|T(\eta_A)| T2A[T^2(A)]
-                        TA -->|id_T(A)| TA2[T(A)]
-                        T2A -->|\eta_A| TA2
+                    graph LR
+                        TA["T(A)"] -->|"T(\eta_A)"| T2A["T^2(A)"]
+                        TA -->|"id_T(A)"| TA2["T(A)"]
+                        T2A -->|"\eta_A"| TA2
                 </div>
                 <p>By the monad’s unit axiom, \(\mu_A \circ T(\eta_A) = \text{id}_{TA}\). In Haskell, for <code>State</code>, <code>return</code> and <code>>>=</code> satisfy this law.</p>
             </div>
